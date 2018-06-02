@@ -1,120 +1,54 @@
+<?php include_once "includes/header.php" ?>
 
-<?php 
+    <div class="container">
 
-include "includes/header.php";
-
-include_once "models/Product.php";
-
-$product = new Product();
-
-if(!array_key_exists("delete", $_GET)) {
-    if (!array_key_exists("update", $_GET)) {
-        $p_id = $_GET['id'];
-        $item = $product->load_product($p_id);
-    
-        if ($item) {
-            echo render_product($item, $p_id);
-        } else {
-            echo "<div class='alert alert-warning'>Invalid id</div>";
-        }
-    }
-} else {
-    echo "
-        <div class='alert alert-success'>
-            Product deleted..
-            <a href='market.php'>Back to market</a>
+        <div class="message">
         </div>
-    ";
-}
 
-if(array_key_exists("update", $_GET)) {
-    echo "
-        <div class='alert alert-success'>
-            Product updated..
-            <a href='market.php'>Back to market</a>
+        <div id="result">results here.</div>
+
+        <div class="hide" id="controls">
+            <button type="button" 
+                data-toggle="modal" data-target="#updateModal"
+                class="btn btn-secondary btn-sm rounded">update</button>
+            <button type="button" class="btn btn-danger btn-sm rounded" id="btn_delete">delete</button>
         </div>
-    ";
-}
 
-function render_product($item) {
-    return '
-        <div class="card text-dark">
-            <div class="card-body">
-                <div class="product-details">
-                    <h4 class="card-title">'.$item["product_name"].'</h4>
-                    <p class="card-text"><b>&#8369;'.number_format($item["product_price"]).'</b></p>
-                    <p class="card-text">'.$item["product_description"].'</p>
-                    <p class="card-text">
-                        <small class="text-muted">
-                        '.date("m/d/Y h:i A", strtotime($item["product_posted"])).'
-                        </small>
-                    </p>
-                </div>
-
-                <div class="collapse mt-2" id="collapse-form">
-
-                    <form id="updateForm">
-                        <fieldset>
-                            <legend>Update Product 
-                                <span class="float-right">
-                                    <button type="button" id="btnClose"
-                                    class="btn btn-danger btn-sm"
-                                    data-toggle="collapse" 
-                                    data-target="#collapse-form" 
-                                    aria-expanded="false" 
-                                    aria-controls="collapse-form">
-                                        &times;
-                                    </button>
-                                </span>
-                            </legend>
-                        </fieldset>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Name: </label>
-                                    <input type="text" id="name" name="p_name" class="form-control" value="'.$item["product_name"].'">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="p-price">Price: </label>
-                                    <input type="number" id="p-price" name="p_price" min="0" class="form-control" value="'.$item["product_price"].'">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="p-desc">Description: </label>
-                            <textarea id="p-desc" rows="5" name="p_desc" class="form-control">'.$item["product_description"].'</textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-outline-secondary float-right rounded">
-                            Submit
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateModalTitle">Update your item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                         </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateForm" class="mb-3">
+                        
+                            <div class="form-group">
+                                <input type="text" id="name" name="p_name" class="form-control">
+                            </div>
 
-                    </form>
+                            <div class="form-group">
+                                <input type="number" id="p-price" name="p_price" min="0" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <textarea id="p-desc" rows="5" name="p_desc" class="form-control"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                            style="width: 8rem"
+                            type="button" id="btn_save" data-dismiss="modal"
+                            class="btn btn-secondary btn-sm rounded">Save</button>
+                    </div>
                 </div>
             </div>
-            <div class="card-footer">
-                <button type="button" id="btnUpdate" class="btn btn-default btn-sm"
-                    data-toggle="collapse" 
-                    data-target="#collapse-form" 
-                    aria-expanded="false" 
-                    aria-controls="collapse-form">
-                    <i class="fa fa-edit" aria-hidden="true"></i>
-                    Update
-                </button>
-                
-                <button type="button" id="btnDelete" name="btn_delete" class="btn btn-outline-danger btn-sm">
-                    <i class="fa fa-trash-alt" aria-hidden="true"></i>
-                    Delete
-                </button>
-            </div>
         </div>
-     ';
-}
-?>
+    </div>
 
-<?php include "includes/footer.php";?>
-    
-<script src="assets/js/product.js"></script>
+<?php include_once "includes/footer.php" ?>
+<script src="assets/js/another-test.js"></script>

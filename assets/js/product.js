@@ -1,90 +1,125 @@
-
 window.addEventListener('load', () => {
-
+    
     const   urlParams   = new URLSearchParams(window.location.search),
             formData    = new FormData();
 
-    const   btnUpdate   = document.querySelector('#btnUpdate'),
-            btnDelete   = document.querySelector('#btnDelete'),
-            btnClose    = document.querySelector('#btnClose'),
-            prodDetails = document.querySelector('.product-details'),
-            updateForm  = document.querySelector('#updateForm');
+    const   productId   = urlParams.get('id');
 
-    let     currentState = 0;
-    
-    const id = urlParams.get('id');
-    formData.append('p_id', id);
+    formData.append('p_id', productId);
 
-    if(btnDelete) {
-        btnDelete.addEventListener('click', () => {
-            if (confirm('You sure you wanna delete this product?')) {
+    loadItem(formData);
+
+    getElement('#btn_delete')
+        .addEventListener('click', () => {
+            if(confirm('Are you sure you want to delete this item?'))
                 deleteItem(formData);
-            }
         });
-    }
-    
-    if (btnUpdate) {
-        btnUpdate.addEventListener('click', () => {
-            currentState++;
 
-            prodDetails.classList.add('collapse');
+    getElement('#btn_save')
+        .addEventListener('click', () => {
 
-            if (currentState == 2) {
-                prodDetails.classList.remove('collapse');
-                currentState = 0;
-            }
-        });
-    }
+            getAllElements('.form-control')
+                .forEach(input => formData.append(input.name, input.value));
 
-    if (btnClose) {
-        btnClose.addEventListener('click', () => {
-            currentState++;
-
-            prodDetails.classList.add('collapse');
-
-            if (currentState == 2) {
-                prodDetails.classList.remove('collapse');
-                currentState = 0;
-            }
-        });
-    }
-
-    if (updateForm) {
-        updateForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-    
-            const inputs = updateForm.querySelectorAll('.form-control');
-    
-            inputs.forEach(input => {
-                formData.append(input.name, input.value);
-            });
-    
             updateItem(formData);
-        });
+
+        })
+
+    function loadItem(formBody) {
+        fetch('functions/tester.php', { method: 'POST', body: formBody })
+            .then(res => res.json())
+            .then(response => {
+                if (response.length > 0) {
+                    const controls = getElement('#controls');
+
+                    if (controls.classList.contains('hide')) {
+                        controls.classList.remove('hide');
+                        controls.classList.add('show');
+                    }
+
+                    renderViewWithInput(response.product);
+                    renderView(response.product);
+
+                } else renderError(response);
+            })
+            .catch(error => console.log(error));
+    }
+    
+    function deleteItem(formBody) {
+        fetch('functions/remove_product.php', { method: 'POST', body: formBody})
+            .then(res => res.json())
+            .then(response => {
+                renderMessage(response.message);
+                getElement('#result').innerHTML = '';
+
+                if (controls.classList.contains('show')) {
+                    controls.classList.remove('show');
+                    controls.classList.add('hide');
+                }
+            })
+            .catch(error => console.log(error));
     }
     
     function updateItem(formBody) {
-
-        fetch('functions/update_product.php', {method: 'POST', body: formBody})
-            .then(res => res.text())
-            .then(data => {
-                location.href = 'product.php?update=success';
-                console.log(data);
+        fetch('functions/update_product.php', { method: 'POST', body: formBody })
+            .then(res => res.json())
+            .then(response => {
+                renderView(response);
             })
             .catch(error => console.log(error));
-
     }
 
-    function deleteItem(id) {
-
-        fetch('functions/remove_product.php', {method: 'POST', body: id})
-            .then(res => res.text())
-            .then(data => {
-                location.href = 'product.php?delete=success';
-                console.log(data);
-            })
-            .catch(error => console.log(error));
-
+    function renderViewWithInput(response) {
+        getElement('#updateForm')
+            .querySelectorAll('.form-control')
+                .forEach(input => {
+                    switch(input.name) {
+                        case 'p_name':
+                            input.value = response.product_name
+                            break;
+                        case 'p_price':
+                            input.value = response.product_price
+                            break;
+                        case 'p_desc':
+                            input.value = response.product_description
+                            break;
+                    }
+                });
+    }
+    
+    function renderView(item) {
+        getElement('#result')
+            .innerHTML = `
+                <h4>${item.product_name}</h4>
+                <p>${item.product_description}</p>
+            `;
     }
 
+    function renderMessage(message) {
+        getElement('.message')
+            .innerHTML = `
+                <div class="alert alert-success">
+                    ${message}
+                </div>
+            `;
+    }
+
+    function renderError(response) {
+        getElement('#result')
+            .innerHTML = `
+                <div class="alert alert-warning">
+                    Ooops! something fishy. The page you requested is not available or maybe someone deleted it already.
+                </div>
+                <a href="market.php">go back</a>
+            `;
+    }
+    
+    function getElement(query) {
+        return document.querySelector(query);
+    }
+    
+    function getAllElements(query) {
+        return document.querySelectorAll(query);
+    }
 });
+
