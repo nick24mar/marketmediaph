@@ -17,7 +17,7 @@ window.addEventListener('load', () => {
 
 function fetchItems() {
 
-    fetch('functions/load_products.php', {method: 'GET'})
+    fetch('controllers/load_products.php', {method: 'GET'})
         .then(res => res.json())
         .then(response => {
             if(response.length > 0) {
@@ -34,7 +34,7 @@ function fetchItems() {
 }
 
 function addItem(item) {
-    fetch('functions/insert_product.php', {method: 'POST',body: item})
+    fetch('controllers/insert_product.php', {method: 'POST',body: item})
         .then(res => {
             if (res.status === 200)
                 return res.text()

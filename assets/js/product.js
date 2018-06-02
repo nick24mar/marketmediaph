@@ -26,7 +26,7 @@ window.addEventListener('load', () => {
         })
 
     function loadItem(formBody) {
-        fetch('functions/load_product.php', { method: 'POST', body: formBody })
+        fetch('controllers/load_product.php', { method: 'POST', body: formBody })
             .then(res => res.json())
             .then(response => {
                 if (response.length > 0) {
@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
     }
     
     function deleteItem(formBody) {
-        fetch('functions/remove_product.php', { method: 'POST', body: formBody})
+        fetch('controllers/remove_product.php', { method: 'POST', body: formBody})
             .then(res => res.json())
             .then(response => {
                 renderMessage(response.message);
@@ -61,7 +61,7 @@ window.addEventListener('load', () => {
     }
     
     function updateItem(formBody) {
-        fetch('functions/update_product.php', { method: 'POST', body: formBody })
+        fetch('controllers/update_product.php', { method: 'POST', body: formBody })
             .then(res => res.json())
             .then(response => {
                 renderView(response);
