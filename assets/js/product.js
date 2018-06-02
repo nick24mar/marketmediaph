@@ -26,7 +26,7 @@ window.addEventListener('load', () => {
         })
 
     function loadItem(formBody) {
-        fetch('functions/tester.php', { method: 'POST', body: formBody })
+        fetch('functions/load_product.php', { method: 'POST', body: formBody })
             .then(res => res.json())
             .then(response => {
                 if (response.length > 0) {

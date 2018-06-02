@@ -39,7 +39,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="productForm" method="post" >
+                                <form id="newItemForm" method="post" >
 
                                     <div class="form-group">
                                         <input type="text" id="name" name="p_name" placeholder="What are you selling" class="form-control">
@@ -66,9 +66,7 @@
                 </div>
 
 
-                <div class="card-columns" id="products">
-                    Loading...
-                </div>
+                <div class="card-columns" id="results">loading..</div>
             </div>
         </div>
     </div>

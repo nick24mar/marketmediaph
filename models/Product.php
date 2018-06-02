@@ -32,14 +32,19 @@ class Product extends Database {
     }
 
     public function load_all_products() {
-        $items = array();
-        $sql = "SELECT * FROM products ORDER BY product_posted DESC";
+        try {
 
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "SELECT * FROM products ORDER BY product_posted DESC";
 
-        return $products;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $products;
+            
+        }catch(PDOException $e) {
+            return $e;
+        }
     }
 
     public function remove_product($id) {

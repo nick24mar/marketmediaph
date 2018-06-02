@@ -51,4 +51,4 @@
     </div>
 
 <?php include_once "includes/footer.php" ?>
-<script src="assets/js/another-test.js"></script>
+<script src="assets/js/product.js"></script>
